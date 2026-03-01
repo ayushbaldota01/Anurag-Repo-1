@@ -4,8 +4,6 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import ParallaxImage from '@/components/ui/ParallaxImage';
 import TextReveal from '@/components/ui/TextReveal';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { Float, Icosahedron } from '@react-three/drei';
 import * as THREE from 'three';
 
 /**
@@ -17,76 +15,7 @@ import * as THREE from 'three';
  * REDUCED: Canvas overflow from inset-[-120%] to inset-[-60%] (3.4x → 2.2x viewport)
  */
 
-// Shared scroll position ref to avoid layout thrashing
-const scrollRef = { current: 0 };
-if (typeof window !== 'undefined') {
-    window.addEventListener('scroll', () => {
-        scrollRef.current = window.scrollY;
-    }, { passive: true });
-}
-
-function FunkyShapes() {
-    const outerRef = useRef<THREE.Mesh>(null);
-    const innerRef = useRef<THREE.Mesh>(null);
-
-    useFrame((state) => {
-        const scroll = scrollRef.current;
-
-        if (outerRef.current) {
-            outerRef.current.rotation.y += 0.003;
-            outerRef.current.rotation.x += 0.002;
-            outerRef.current.rotation.z = scroll * 0.001;
-
-            const scale = 1 + Math.sin(state.clock.elapsedTime * 2) * 0.05;
-            outerRef.current.scale.setScalar(scale);
-        }
-        if (innerRef.current) {
-            innerRef.current.rotation.y -= 0.004;
-            innerRef.current.rotation.x -= 0.002;
-            innerRef.current.rotation.z = scroll * -0.0012;
-        }
-    });
-
-    return (
-        <Float speed={3} rotationIntensity={2} floatIntensity={2.5}>
-            <group>
-                {/* Broad Outer Icosahedron - emissive wireframe */}
-                <Icosahedron ref={outerRef} args={[3.2, 0]} position={[0, 0, 0]}>
-                    <meshStandardMaterial
-                        color="#ffffff"
-                        wireframe
-                        emissive="#ffffff"
-                        emissiveIntensity={0.5}
-                        transparent
-                        opacity={0.3}
-                    />
-                </Icosahedron>
-
-                {/* Inner rotating wireframe icosahedron */}
-                <Icosahedron ref={innerRef} args={[1.5, 1]} position={[0, 0, 0]}>
-                    <meshStandardMaterial
-                        color="#ffffff"
-                        wireframe
-                        emissive="#ffffff"
-                        emissiveIntensity={0.3}
-                        transparent
-                        opacity={0.4}
-                    />
-                </Icosahedron>
-            </group>
-        </Float>
-    );
-}
-
-/** Automatically lower pixel ratio on this canvas for perf */
-function AdaptiveDpr() {
-    const { gl } = useThree();
-    useEffect(() => {
-        gl.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-    }, [gl]);
-    return null;
-}
-
+// Note: 3D features removed to satisfy compilation.
 export default function Philosophy() {
     const containerRef = useRef<HTMLElement>(null);
     const numberRef = useRef<HTMLDivElement>(null);

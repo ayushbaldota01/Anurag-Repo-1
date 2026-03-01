@@ -35,7 +35,17 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
         gsap.ticker.add(rafCallback);
         gsap.ticker.lagSmoothing(0);
 
+        // Fix: Force GSAP to recalculate positions on load/resize to prevent broken reloads
+        const refreshTriggers = () => ScrollTrigger.refresh();
+        window.addEventListener('resize', refreshTriggers);
+
+        // Wait a tick for initial render to settle
+        requestAnimationFrame(() => {
+            ScrollTrigger.refresh();
+        });
+
         return () => {
+            window.removeEventListener('resize', refreshTriggers);
             if (rafCallbackRef.current) {
                 gsap.ticker.remove(rafCallbackRef.current);
             }
