@@ -77,29 +77,29 @@ function OrbitingRings() {
 
     return (
         <group ref={groupRef}>
-            {/* Core Gold Ring */}
-            <Torus args={[4.2, 0.01, 16, 64]} rotation={[0, 0, 0]}>
-                <meshBasicMaterial color={ACCENT_GOLD} transparent opacity={0.6} blending={THREE.AdditiveBlending} />
+            {/* Core Gold Ring - Hugging the camera */}
+            <Torus args={[2.2, 0.04, 16, 100]} rotation={[0, 0, 0]}>
+                <meshBasicMaterial color={ACCENT_GOLD} transparent opacity={0.7} blending={THREE.AdditiveBlending} />
             </Torus>
 
-            {/* Deep Blue Orbital */}
-            <Torus args={[5.0, 0.008, 16, 64]} rotation={[Math.PI / 4, Math.PI / 6, 0]}>
-                <meshBasicMaterial color="#4466ff" transparent opacity={0.4} blending={THREE.AdditiveBlending} />
+            {/* Deep Blue Orbital - Tight focus */}
+            <Torus args={[2.6, 0.03, 16, 100]} rotation={[Math.PI / 4, Math.PI / 6, 0]}>
+                <meshBasicMaterial color="#4466ff" transparent opacity={0.5} blending={THREE.AdditiveBlending} />
             </Torus>
 
-            {/* Chaotic Purple Ring */}
-            <Torus args={[3.5, 0.015, 16, 64]} rotation={[-Math.PI / 3, 0, Math.PI / 4]}>
-                <meshBasicMaterial color="#8800ff" transparent opacity={0.5} blending={THREE.AdditiveBlending} />
+            {/* Chaotic Purple Ring - Energetic spin */}
+            <Torus args={[3.0, 0.025, 16, 100]} rotation={[-Math.PI / 3, 0, Math.PI / 4]}>
+                <meshBasicMaterial color="#8800ff" transparent opacity={0.6} blending={THREE.AdditiveBlending} />
             </Torus>
 
             {/* Inner Cyan Glowing Thread */}
-            <Torus args={[2.8, 0.005, 16, 64]} rotation={[Math.PI / 2, Math.PI / 2, 0]}>
+            <Torus args={[2.4, 0.02, 16, 100]} rotation={[Math.PI / 2, Math.PI / 2, 0]}>
                 <meshBasicMaterial color="#00ffff" transparent opacity={0.8} blending={THREE.AdditiveBlending} />
             </Torus>
 
-            {/* Massive Outer Halo */}
-            <Torus args={[6.5, 0.002, 16, 128]} rotation={[0, Math.PI / 2, 0]}>
-                <meshBasicMaterial color="#ffffff" transparent opacity={0.15} blending={THREE.AdditiveBlending} />
+            {/* Outer Halo - Compact boundary */}
+            <Torus args={[3.4, 0.015, 16, 128]} rotation={[0, Math.PI / 2, 0]}>
+                <meshBasicMaterial color="#ffffff" transparent opacity={0.3} blending={THREE.AdditiveBlending} />
             </Torus>
         </group>
     );
@@ -265,17 +265,17 @@ function SceneRig() {
         group.current.rotation.y = THREE.MathUtils.lerp(
             group.current.rotation.y,
             targetRotationY + scrollRotY,
-            0.08
+            0.15
         );
         group.current.rotation.x = THREE.MathUtils.lerp(
             group.current.rotation.x,
             targetRotationX,
-            0.08
+            0.15
         );
 
         group.current.scale.lerp(
             new THREE.Vector3(targetScale, targetScale, targetScale),
-            0.08
+            0.15
         );
     });
 

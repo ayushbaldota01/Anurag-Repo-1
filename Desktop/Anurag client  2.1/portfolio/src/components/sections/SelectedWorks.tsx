@@ -131,9 +131,17 @@ export default function SelectedWorks() {
                         y: `+=${parseFloat(data.targetY) > 0 ? '15vh' : '-15vh'}`,
                         x: `+=${parseFloat(data.targetX) > 0 ? '5vw' : '-5vw'}`,
                         rotationZ: `+=${data.rotation * -0.5}`,
-                        duration: 2,
+                        duration: 1.5,
                         ease: 'none',
                     }, 1);
+
+                    // Final step: Fade out as we approach the next section
+                    tl.to(img, {
+                        opacity: 0,
+                        scale: 0.5,
+                        duration: 0.5,
+                        ease: 'power2.in',
+                    }, 1.5);
                 });
 
             });
@@ -168,7 +176,7 @@ export default function SelectedWorks() {
     return (
         <section
             ref={sectionRef}
-            className="relative w-full bg-[#030303] text-white overflow-hidden md:h-[150vh] h-auto z-10"
+            className="relative w-full bg-[#030303] text-white overflow-hidden md:h-[200vh] h-auto z-10"
         >
             {/* The Sticky Wrapper */}
             <div className="md:sticky md:top-0 md:h-[100svh] w-full flex flex-col md:overflow-hidden items-center justify-center py-20 md:py-0">

@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <>
       <LoadingIntro />
-      <main className="relative flex min-h-screen flex-col items-center justify-between">
+      <main className="relative flex min-h-screen flex-col items-center justify-start">
         <Hero />
         <Philosophy />
         <SelectedWorks />
