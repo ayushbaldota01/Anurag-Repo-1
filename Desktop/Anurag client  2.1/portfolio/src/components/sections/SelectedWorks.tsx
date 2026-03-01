@@ -79,7 +79,7 @@ export default function SelectedWorks() {
 
             // DESKTOP: Placed explosion animation
             mm.add('(min-width: 768px)', () => {
-                const images = gsap.utils.toArray<HTMLElement>('.explosion-image');
+                const images = gsap.utils.toArray<HTMLElement>('.explosion-image-desktop');
                 if (images.length === 0) return;
 
                 // 1. Set initial state: Hidden in the absolute center
@@ -138,7 +138,7 @@ export default function SelectedWorks() {
             // MOBILE: Simple grid/stack
             mm.add('(max-width: 767px)', () => {
                 // Remove the absolute center positioning and just show them natively
-                const images = gsap.utils.toArray<HTMLElement>('.explosion-image');
+                const images = gsap.utils.toArray<HTMLElement>('.explosion-image-mobile');
                 gsap.set(images, { clearProps: 'all' });
 
                 // Simple fade up on scroll
@@ -185,7 +185,7 @@ export default function SelectedWorks() {
                     {PROJECTS.map((project, idx) => (
                         <div
                             key={project.id}
-                            className={`explosion-image absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[25vw] ${project.aspectRatio} origin-center will-change-transform pointer-events-auto cursor-pointer p-1`}
+                            className={`explosion-image-desktop absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[25vw] ${project.aspectRatio} origin-center will-change-transform pointer-events-auto cursor-pointer p-1`}
                             onMouseEnter={() => setCursorMode('view')}
                             onMouseLeave={() => setCursorMode('default')}
                         >
@@ -207,7 +207,7 @@ export default function SelectedWorks() {
                     {PROJECTS.map((project, idx) => (
                         <div
                             key={`mob-${project.id}`}
-                            className={`explosion-image relative w-full ${project.aspectRatio} overflow-hidden bg-[#111]`}
+                            className={`explosion-image-mobile relative w-full ${project.aspectRatio} overflow-hidden bg-[#111]`}
                         >
                             <img
                                 src={project.src}
