@@ -83,64 +83,57 @@ export default function SelectedWorks() {
                 if (images.length === 0) return;
 
                 // 1. Initial State:
-                // Make them super small in the center, invisible
                 gsap.set(images, {
                     x: 0,
                     y: 0,
-                    scale: 0.1,
+                    scale: 0,
                     rotationZ: 0,
                     opacity: 0,
                 });
 
                 // 2. The scroll timeline attached to the container
-                // We add scrub: 1.2 for that heavy buttery dragging feel.
                 const tl = gsap.timeline({
                     scrollTrigger: {
                         trigger: sectionRef.current,
-                        start: 'top top',
+                        start: 'top 60%', // Trigger earlier, right when the section comes into view
                         end: 'bottom bottom',
-                        scrub: 1.2,
+                        scrub: 1, // Smoother follow
                     }
                 });
 
                 // 3. The Explosion Sequence
-                // We don't just `.forEach` scatter them at once. 
-                // We use Staggered tweens to create a "burst".
-
-                // First: Snap visibility on immediately as scroll begins
+                // Instantly pop into existence scaling up
                 tl.to(images, {
                     opacity: 1,
-                    duration: 0.1, // Near instant
-                    ease: 'none',
-                    stagger: 0.02
+                    scale: (i) => PROJECTS[i].scale,
+                    duration: 0.3,
+                    ease: 'power4.out',
+                    stagger: 0.05
                 }, 0);
 
-                // Second: The violent outward throw 
-                // Uses `expo.out` to feel incredibly explosive but then dramatically slow down.
+                // Start throwing outwards heavily early in the scrub
                 images.forEach((img, i) => {
                     const data = PROJECTS[i];
 
-                    // Add random variations to z-index to create complex overlapping
                     gsap.set(img, { zIndex: Math.floor(Math.random() * 10) + 10 });
 
+                    // The outward translation
                     tl.to(img, {
                         x: data.targetX,
                         y: data.targetY,
-                        scale: data.scale,
-                        rotationZ: data.rotation * 1.5, // Exaggerate tilt slightly during the throw
-                        duration: 1.5 * data.speed, // Slower duration, let scrub control the time
-                        ease: 'power3.out', // Snappy start, long tail
-                    }, i * 0.05); // Notice the stagger delay: creates a ripple burst
+                        rotationZ: data.rotation,
+                        duration: 1.2 * data.speed,
+                        ease: 'power2.out',
+                    }, 0.1);
 
-                    // Third Phase: The Infinite Restless Parallax
-                    // As the user continues scrolling, they don't just stop. They keep drifting in 3D.
+                    // The endless parallax floating
                     tl.to(img, {
-                        y: `+=${parseFloat(data.targetY) > 0 ? '15vh' : '-15vh'}`, // Foreground pulls down, background pushes up
+                        y: `+=${parseFloat(data.targetY) > 0 ? '15vh' : '-15vh'}`,
                         x: `+=${parseFloat(data.targetX) > 0 ? '5vw' : '-5vw'}`,
-                        rotationZ: `+=${data.rotation * -0.5}`, // Counter-rotate slowly
+                        rotationZ: `+=${data.rotation * -0.5}`,
                         duration: 2,
                         ease: 'none',
-                    }, 0.8); // Kick in while the first explosion is still settling
+                    }, 1);
                 });
 
             });
