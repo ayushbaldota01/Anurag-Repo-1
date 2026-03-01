@@ -82,55 +82,65 @@ export default function SelectedWorks() {
                 const images = gsap.utils.toArray<HTMLElement>('.explosion-image-desktop');
                 if (images.length === 0) return;
 
-                // 1. Set initial state: Hidden in the absolute center
+                // 1. Initial State:
+                // Make them super small in the center, invisible
                 gsap.set(images, {
                     x: 0,
                     y: 0,
-                    scale: 0,
+                    scale: 0.1,
                     rotationZ: 0,
                     opacity: 0,
                 });
 
-                // 2. Create the scroll timeline attached to the container
+                // 2. The scroll timeline attached to the container
+                // We add scrub: 1.2 for that heavy buttery dragging feel.
                 const tl = gsap.timeline({
                     scrollTrigger: {
                         trigger: sectionRef.current,
                         start: 'top top',
                         end: 'bottom bottom',
-                        scrub: 1, // Smooth, weighty scrubbing
+                        scrub: 1.2,
                     }
                 });
 
-                // 3. The Explosion Tween
-                // First, fade them in quickly (the first 10% of movement)
+                // 3. The Explosion Sequence
+                // We don't just `.forEach` scatter them at once. 
+                // We use Staggered tweens to create a "burst".
+
+                // First: Snap visibility on immediately as scroll begins
                 tl.to(images, {
                     opacity: 1,
-                    duration: 0.2, // Fast fade in
+                    duration: 0.1, // Near instant
                     ease: 'none',
+                    stagger: 0.02
                 }, 0);
 
-                // Then, scatter them outward linearly tracking scroll progress
+                // Second: The violent outward throw 
+                // Uses `expo.out` to feel incredibly explosive but then dramatically slow down.
                 images.forEach((img, i) => {
                     const data = PROJECTS[i];
+
+                    // Add random variations to z-index to create complex overlapping
+                    gsap.set(img, { zIndex: Math.floor(Math.random() * 10) + 10 });
+
                     tl.to(img, {
                         x: data.targetX,
                         y: data.targetY,
                         scale: data.scale,
-                        rotationZ: data.rotation,
-                        duration: 1 * data.speed, // Slightly altering speeds creates depth parallax
-                        ease: 'power2.out',
-                    }, 0);
-                });
+                        rotationZ: data.rotation * 1.5, // Exaggerate tilt slightly during the throw
+                        duration: 1.5 * data.speed, // Slower duration, let scrub control the time
+                        ease: 'power3.out', // Snappy start, long tail
+                    }, i * 0.05); // Notice the stagger delay: creates a ripple burst
 
-                // 4. Subtle Parallax / Drift after the "explosion" completes
-                // As the user continues scrolling down the giant container, the images drift slightly
-                images.forEach((img, i) => {
+                    // Third Phase: The Infinite Restless Parallax
+                    // As the user continues scrolling, they don't just stop. They keep drifting in 3D.
                     tl.to(img, {
-                        y: `+=${PROJECTS[i].targetY.includes('-') ? '-10vh' : '10vh'}`, // drift further out
-                        rotationZ: `+=${PROJECTS[i].rotation > 0 ? 2 : -2}`,
-                        duration: 0.8,
-                        ease: 'linear',
-                    }, 1.0); // append after the main explosion completes
+                        y: `+=${parseFloat(data.targetY) > 0 ? '15vh' : '-15vh'}`, // Foreground pulls down, background pushes up
+                        x: `+=${parseFloat(data.targetX) > 0 ? '5vw' : '-5vw'}`,
+                        rotationZ: `+=${data.rotation * -0.5}`, // Counter-rotate slowly
+                        duration: 2,
+                        ease: 'none',
+                    }, 0.8); // Kick in while the first explosion is still settling
                 });
 
             });
