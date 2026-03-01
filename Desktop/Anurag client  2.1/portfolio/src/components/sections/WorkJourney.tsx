@@ -118,7 +118,7 @@ export default function WorkJourney() {
     ));
 
     return (
-        <div ref={containerRef} className="wj-container bg-[#0A0A0A] text-[#FFFFFF] w-full min-h-screen relative overflow-hidden"
+        <div ref={containerRef as any} className="wj-container bg-[#0A0A0A] text-[#FFFFFF] w-full min-h-screen relative overflow-hidden"
             style={{ '--bg-primary': '#0A0A0A', '--bg-secondary': '#111111', '--bg-elevated': '#1A1A1A', '--accent': '#C4A77D' } as React.CSSProperties}>
 
             {/* NOISE OVERLAY */}
