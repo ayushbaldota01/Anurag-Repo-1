@@ -83,7 +83,7 @@ export default function CelebShowcase() {
     return (
         <section
             ref={containerRef}
-            className="relative w-full h-screen bg-[#030303] text-white flex flex-col justify-center overflow-hidden select-none z-20 md:-mt-[5vh]"
+            className="relative w-full h-screen bg-[#030303] text-white flex flex-col justify-center overflow-hidden select-none z-30 md:-mt-[30vh] shadow-[0_-50px_100px_rgba(0,0,0,0.9)]"
         >
 
             {/* Background Image Layers */}
