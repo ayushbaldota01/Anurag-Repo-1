@@ -12,7 +12,7 @@ const SERVICES = [
     { id: '02', title: 'Celebrity Sessions', desc: 'Collaborating with celebrities & influencers for premium video and photo shoots.', image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1000&auto=format&fit=crop' },
     { id: '03', title: 'Event Coverage', desc: 'Coverage for brand launches, exhibitions, and premium award functions.', image: 'https://images.unsplash.com/photo-1542204165-65bf26472b9b?q=80&w=1000&auto=format&fit=crop' },
     { id: '04', title: 'Lifestyle & Travel', desc: 'Creating engaging lifestyle and travel content specifically optimized for social platforms.', image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1000&auto=format&fit=crop' },
-    { id: '05', title: 'BTS & Reels', desc: 'Dynamic behind-the-scenes videos for fashion shows and creative short-form marketing reels.', image: 'https://images.unsplash.com/photo-1549463959-1e58e3cb23a2?q=80&w=1000&auto=format&fit=crop' },
+    { id: '05', title: 'BTS & Reels', desc: 'Dynamic behind-the-scenes videos for fashion shows and creative short-form marketing reels.', image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=1000&auto=format&fit=crop' },
 ];
 
 export default function Services() {

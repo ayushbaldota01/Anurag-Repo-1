@@ -5,8 +5,8 @@ interface AppState {
     setMenuOpen: (isOpen: boolean) => void;
     isLoading: boolean;
     setLoading: (isLoading: boolean) => void;
-    cursorMode: 'default' | 'view' | 'link';
-    setCursorMode: (mode: 'default' | 'view' | 'link') => void;
+    cursorMode: 'default' | 'view' | 'link' | 'hidden';
+    setCursorMode: (mode: 'default' | 'view' | 'link' | 'hidden') => void;
 }
 
 export const useAppStore = create<AppState>((set) => ({
