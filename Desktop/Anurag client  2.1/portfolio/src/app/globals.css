@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap');
+
+:root {
+  --bg-primary: #0A0A0A;
+  --bg-secondary: #111111;
+  --text-primary: #FFFFFF;
+  --text-secondary: #888888;
+  --accent: #C4A77D;
+  --overlay: rgba(0, 0, 0, 0.7);
+
+  --background: var(--bg-primary);
+  --foreground: var(--text-primary);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: var(--bg-primary);
+    --foreground: var(--text-primary);
+  }
+}
+
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+  /* Hide default cursor for custom cursor implementation */
+  cursor: none; 
+}
+
+/* Ensure links and buttons don't show the default pointer either */
+a, button, [role="button"], input, select, textarea {
+  cursor: none;
+}
+
+/* Utility to ensure text reveals work cleanly */
+.clip-text-container {
+  overflow: hidden;
+}
+
+/* For image masking reveals */
+.clip-path-inset-100 {
+  clip-path: inset(0 100% 0 0);
+}
+
+.clip-path-inset-0 {
+  clip-path: inset(0 0 0 0);
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
