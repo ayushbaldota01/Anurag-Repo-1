@@ -2,7 +2,10 @@
 
 import { useState, useRef, useEffect } from 'react';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useAppStore } from '@/store/useAppStore';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const CELEBS = [
     { name: "Virat Kohli", img: "https://images.unsplash.com/photo-1583391265882-99d6fb350711?q=80&w=1600&auto=format&fit=crop" },
@@ -21,6 +24,23 @@ export default function CelebShowcase() {
         const container = containerRef.current;
         if (!container) return;
 
+        const ctx = gsap.context(() => {
+            gsap.fromTo('.celeb-item',
+                { y: 50, opacity: 0 },
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 1.2,
+                    stagger: 0.1,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: container,
+                        start: 'top 70%',
+                    }
+                }
+            );
+        }, container);
+
         let animationFrameId: number;
         // Native mouse tracking to update CSS variables for the performant lens hook
         const handleMouseMove = (e: MouseEvent) => {
@@ -37,6 +57,7 @@ export default function CelebShowcase() {
         return () => {
             container.removeEventListener('mousemove', handleMouseMove);
             if (animationFrameId) cancelAnimationFrame(animationFrameId);
+            ctx.revert();
         };
     }, []);
 
@@ -62,7 +83,7 @@ export default function CelebShowcase() {
     return (
         <section
             ref={containerRef}
-            className="relative w-full h-screen bg-[#030303] text-white flex flex-col justify-center overflow-hidden select-none py-20"
+            className="relative w-full h-screen bg-[#030303] text-white flex flex-col justify-center overflow-hidden select-none z-20 md:-mt-[5vh]"
         >
 
             {/* Background Image Layers */}
@@ -111,7 +132,7 @@ export default function CelebShowcase() {
                             setCursorMode('default');
                         }}
                     >
-                        <div className="py-8 md:py-10 cursor-none w-full w-full flex items-center justify-center overflow-hidden">
+                        <div className="celeb-item py-8 md:py-10 cursor-none w-full flex items-center justify-center overflow-hidden">
                             <h2 className="text-5xl md:text-[8vw] font-display font-light uppercase tracking-tight text-white/40 transition-all duration-700 ease-[cubic-bezier(0.19,1,0.22,1)] md:group-hover:text-white md:group-hover:translate-x-[40px] mix-blend-difference whitespace-nowrap">
                                 {celeb.name}
                             </h2>

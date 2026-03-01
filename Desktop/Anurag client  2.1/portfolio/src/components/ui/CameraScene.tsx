@@ -69,18 +69,37 @@ function OrbitingRings() {
 
     useFrame((state) => {
         if (groupRef.current) {
-            groupRef.current.rotation.y = state.clock.elapsedTime * 0.05;
-            groupRef.current.rotation.z = state.clock.elapsedTime * 0.02;
+            groupRef.current.rotation.y = state.clock.elapsedTime * 0.1;
+            groupRef.current.rotation.z = state.clock.elapsedTime * 0.05;
+            groupRef.current.rotation.x = state.clock.elapsedTime * 0.08;
         }
     });
 
     return (
         <group ref={groupRef}>
-            <Torus args={[4.2, 0.005, 16, 64]}>
-                <meshBasicMaterial color={ACCENT_GOLD} transparent opacity={0.2} blending={THREE.AdditiveBlending} />
+            {/* Core Gold Ring */}
+            <Torus args={[4.2, 0.01, 16, 64]} rotation={[0, 0, 0]}>
+                <meshBasicMaterial color={ACCENT_GOLD} transparent opacity={0.6} blending={THREE.AdditiveBlending} />
             </Torus>
-            <Torus args={[5.0, 0.003, 16, 64]} rotation={[Math.PI / 4, 0, 0]}>
-                <meshBasicMaterial color="#4466ff" transparent opacity={0.1} blending={THREE.AdditiveBlending} />
+
+            {/* Deep Blue Orbital */}
+            <Torus args={[5.0, 0.008, 16, 64]} rotation={[Math.PI / 4, Math.PI / 6, 0]}>
+                <meshBasicMaterial color="#4466ff" transparent opacity={0.4} blending={THREE.AdditiveBlending} />
+            </Torus>
+
+            {/* Chaotic Purple Ring */}
+            <Torus args={[3.5, 0.015, 16, 64]} rotation={[-Math.PI / 3, 0, Math.PI / 4]}>
+                <meshBasicMaterial color="#8800ff" transparent opacity={0.5} blending={THREE.AdditiveBlending} />
+            </Torus>
+
+            {/* Inner Cyan Glowing Thread */}
+            <Torus args={[2.8, 0.005, 16, 64]} rotation={[Math.PI / 2, Math.PI / 2, 0]}>
+                <meshBasicMaterial color="#00ffff" transparent opacity={0.8} blending={THREE.AdditiveBlending} />
+            </Torus>
+
+            {/* Massive Outer Halo */}
+            <Torus args={[6.5, 0.002, 16, 128]} rotation={[0, Math.PI / 2, 0]}>
+                <meshBasicMaterial color="#ffffff" transparent opacity={0.15} blending={THREE.AdditiveBlending} />
             </Torus>
         </group>
     );
