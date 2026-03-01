@@ -2,6 +2,7 @@ import LoadingIntro from '@/components/sections/LoadingIntro';
 import Hero from '@/components/sections/Hero';
 import Philosophy from '@/components/sections/Philosophy';
 import SelectedWorks from '@/components/sections/SelectedWorks';
+import FeaturedCelebs from '@/components/sections/FeaturedCelebs';
 import Services from '@/components/sections/Services';
 import Footer from '@/components/sections/Footer';
 
@@ -13,6 +14,7 @@ export default function Home() {
         <Hero />
         <Philosophy />
         <SelectedWorks />
+        <FeaturedCelebs />
         <Services />
       </main>
       <Footer />
