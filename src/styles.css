@@ -171,7 +171,7 @@
   .eyebrow { font-size: .72rem; font-weight: 500; letter-spacing: .18em; text-transform: uppercase; color: var(--color-muted-foreground); }
   .page-title { margin-top: 1.25rem; font-family: var(--font-display); font-size: clamp(3.5rem, 8vw, 6rem); line-height: 1; }
   .nav-list { display: flex; align-items: center; gap: 2rem; }
-  .portfolio-nav { position: fixed; left: 50%; top: 2.5rem; z-index: 40; display: flex; width: min(72rem, calc(100% - 2rem)); transform: translateX(-50%); align-items: center; justify-content: center; gap: 3rem; border-radius: 999px; border: 1px solid var(--color-border); background: oklch(0.13 0.05 286 / 54%); padding: .75rem 1.25rem; box-shadow: var(--nav-shadow); backdrop-filter: blur(26px); animation: fade-up 700ms ease-out .9s both; }
+  .portfolio-nav { position: fixed; left: 50%; top: 2.5rem; z-index: 40; display: flex; width: min(72rem, calc(100% - 2rem)); transform: translateX(-50%); align-items: center; justify-content: center; gap: 3rem; border-radius: 999px; border: 1px solid var(--color-border); background: oklch(0.13 0.05 286 / 54%); padding: .75rem 1.25rem; box-shadow: var(--nav-shadow); backdrop-filter: blur(26px); animation: nav-fade-up 700ms ease-out .9s both; }
   .portfolio-footer { position: relative; z-index: 10; margin: 0 auto; display: grid; gap: 2rem; width: min(92rem, calc(100% - 2rem)); border-top: 1px solid var(--color-border); padding: 2.5rem 0; font-size: .875rem; color: var(--color-muted-foreground); }
   @media (min-width: 768px) { .portfolio-footer { grid-template-columns: 1fr auto; align-items: center; } }
   .nav-link { font-size: .68rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--color-muted-foreground); transition: color 220ms ease, transform 220ms ease; }
@@ -229,5 +229,6 @@
 
 @keyframes aurora-drift { from { transform: scale(1) translate3d(0,0,0); } to { transform: scale(1.08) translate3d(-2%, 1%, 0); } }
 @keyframes fade-up { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes nav-fade-up { from { opacity: 0; transform: translate(-50%, 18px); } to { opacity: 1; transform: translate(-50%, 0); } }
 @keyframes curtain-out { 0%,55% { transform: translateY(0); } 100% { transform: translateY(-100%); } }
 @keyframes mark-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
