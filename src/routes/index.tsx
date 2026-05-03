@@ -1,5 +1,5 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { OpeningCurtain, PortfolioFooter, PortfolioNav, CursorGlow, AuroraField } from "../components/portfolio-chrome";
+import { PageShell } from "../components/portfolio-chrome";
 
 const works = [
   ["The Mirror™", "A guide to seeing your brand, and yourself, clearly.", "Book", "work-visual-a"],
@@ -10,7 +10,7 @@ const works = [
   ["Presence", "A quiet moment of clarity.", "Film", "work-visual-f"],
 ];
 
-export const Route = createFileRoute("/")(({
+export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Works — Portfolio Gallery" },
@@ -18,16 +18,11 @@ export const Route = createFileRoute("/")(({
     ],
   }),
   component: Index,
-}));
+});
 
 function Index() {
   return (
-    <main className="page-root">
-      <OpeningCurtain />
-      <CursorGlow />
-      <AuroraField />
-      <PortfolioNav />
-
+    <PageShell noPadding>
       <section className="relative z-10 flex min-h-[64vh] items-center justify-center px-6 pb-16 pt-36 text-center">
         <h1 className="font-serif text-[clamp(3.2rem,7vw,6.5rem)] font-semibold leading-none animate-fade-up">
           A living gallery.
@@ -54,7 +49,6 @@ function Index() {
           </article>
         ))}
       </section>
-      <PortfolioFooter />
-    </main>
+    </PageShell>
   );
 }

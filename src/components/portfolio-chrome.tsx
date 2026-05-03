@@ -129,16 +129,16 @@ export function PageHeader({ eyebrow, title }: { eyebrow: string; title: string 
   );
 }
 
-export function PageShell({ children }: { children: ReactNode }) {
+/**
+ * PageShell — A standard layout wrapper for page content.
+ * The global chrome (Nav, Footer, Aurora, Cursor) is now handled at the root level
+ * to ensure smooth transitions and avoid unnecessary remounts.
+ */
+export function PageShell({ children, noPadding = false }: { children: ReactNode; noPadding?: boolean }) {
   return (
-    <main className="page-root">
-      <OpeningCurtain />
-      <CursorGlow />
-      <AuroraField />
-      <PortfolioNav />
-      <div className="page-container pt-36 md:pt-44 pb-20">{children}</div>
-      <PortfolioFooter />
-    </main>
+    <div className={noPadding ? "" : "page-container pt-36 md:pt-44 pb-20"}>
+      {children}
+    </div>
   );
 }
 
