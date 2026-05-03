@@ -1,6 +1,7 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { OpeningCurtain, PortfolioFooter, PortfolioNav, CursorGlow, AuroraField } from "../components/portfolio-chrome";
+import { GalleryIntro } from "../components/gallery-intro";
 
 const works = [
   ["The Mirror™", "A guide to seeing your brand, and yourself, clearly.", "Book", "work-visual-a"],
@@ -22,41 +23,63 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const [introVisible, setIntroVisible] = useState(true);
+  const [introDone, setIntroDone] = useState(false);
+
+  // Once the intro fades out, fully unmount it to free WebGL resources
+  const handleIntroDismiss = () => {
+    setIntroVisible(false);
+    setTimeout(() => setIntroDone(true), 50);
+  };
+
   return (
     <main className="page-root">
+      {/* 3D gallery intro — sits on top until dismissed */}
+      {!introDone && (
+        <GalleryIntro onDismiss={handleIntroDismiss} />
+      )}
+
       <OpeningCurtain />
       <CursorGlow />
       <AuroraField />
       <PortfolioNav />
 
-      <section className="relative z-10 flex min-h-[64vh] items-center justify-center px-6 pb-16 pt-36 text-center">
-        <h1 className="font-serif text-[clamp(3.2rem,7vw,6.5rem)] font-semibold leading-none animate-fade-up">
-          A living gallery.
-        </h1>
-      </section>
+      {/* Works content fades in gently once intro is done */}
+      <div
+        style={{
+          opacity: introDone ? 1 : 0,
+          transform: introDone ? 'translateY(0)' : 'translateY(18px)',
+          transition: 'opacity 700ms ease 100ms, transform 700ms ease 100ms',
+        }}
+      >
+        <section className="relative z-10 flex min-h-[64vh] items-center justify-center px-6 pb-16 pt-36 text-center">
+          <h1 className="font-serif text-[clamp(3.2rem,7vw,6.5rem)] font-semibold leading-none animate-fade-up">
+            A living gallery.
+          </h1>
+        </section>
 
-      <section className="page-container grid grid-cols-1 gap-x-28 gap-y-24 pb-28 md:grid-cols-2 md:pb-40">
-        {works.map(([title, description, type, visual], index) => (
-          <article className={`group ${index % 2 ? "md:mt-40" : ""}`} key={title}>
-            <Link to="/" className="block">
-              <div className={`work-visual ${visual}`}>
-                <span className="view-pill">View work</span>
-                <span className="work-note">Selected note: open for direction, identity and story.</span>
-                <span className="mock-title">{title}</span>
-              </div>
-              <div className="mt-5 grid grid-cols-[1fr_auto] gap-5 border-t border-border pt-4">
-                <div>
-                  <h2 className="font-serif text-2xl font-semibold leading-tight md:text-3xl">{title}</h2>
-                  <p className="mt-2 max-w-md text-sm leading-6 text-muted-foreground md:text-base">{description}</p>
+        <section className="page-container grid grid-cols-1 gap-x-28 gap-y-24 pb-28 md:grid-cols-2 md:pb-40">
+          {works.map(([title, description, type, visual], index) => (
+            <article className={`group ${index % 2 ? "md:mt-40" : ""}`} key={title}>
+              <Link to="/" className="block">
+                <div className={`work-visual ${visual}`}>
+                  <span className="view-pill">View work</span>
+                  <span className="work-note">Selected note: open for direction, identity and story.</span>
+                  <span className="mock-title">{title}</span>
                 </div>
-                <p className="eyebrow pt-2">{type}</p>
-              </div>
-            </Link>
-          </article>
-        ))}
-      </section>
-      <PortfolioFooter />
+                <div className="mt-5 grid grid-cols-[1fr_auto] gap-5 border-t border-border pt-4">
+                  <div>
+                    <h2 className="font-serif text-2xl font-semibold leading-tight md:text-3xl">{title}</h2>
+                    <p className="mt-2 max-w-md text-sm leading-6 text-muted-foreground md:text-base">{description}</p>
+                  </div>
+                  <p className="eyebrow pt-2">{type}</p>
+                </div>
+              </Link>
+            </article>
+          ))}
+        </section>
+        <PortfolioFooter />
+      </div>
     </main>
   );
 }
-
