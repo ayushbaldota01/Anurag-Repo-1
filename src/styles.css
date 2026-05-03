@@ -189,13 +189,27 @@
   .aurora-field {
     position: fixed;
     inset: 0;
+    /* Base gradient driven by CSS custom properties set per-route */
     background:
-      radial-gradient(circle at 77% 10%, oklch(0.62 0.31 285 / 0.95), transparent 34%),
-      radial-gradient(circle at 80% 33%, oklch(0.55 0.31 264 / 0.9), transparent 37%),
-      radial-gradient(circle at 72% 70%, oklch(0.52 0.25 345 / 0.78), transparent 38%),
-      radial-gradient(circle at 12% 88%, oklch(0.38 0.2 355 / 0.72), transparent 36%),
-      linear-gradient(90deg, oklch(0.035 0.02 292), oklch(0.055 0.045 284) 48%, oklch(0.24 0.18 286));
+      radial-gradient(circle at var(--aurora-x1, 77%) var(--aurora-y1, 10%), var(--aurora-c1, oklch(0.62 0.31 285 / 0.95)), transparent 34%),
+      radial-gradient(circle at var(--aurora-x2, 80%) var(--aurora-y2, 33%), var(--aurora-c2, oklch(0.55 0.31 264 / 0.9)), transparent 37%),
+      radial-gradient(circle at var(--aurora-x3, 72%) var(--aurora-y3, 70%), var(--aurora-c3, oklch(0.52 0.25 345 / 0.78)), transparent 38%),
+      radial-gradient(circle at var(--aurora-x4, 12%) var(--aurora-y4, 88%), var(--aurora-c4, oklch(0.38 0.2 355 / 0.72)), transparent 36%),
+      linear-gradient(90deg, var(--aurora-base1, oklch(0.035 0.02 292)), var(--aurora-base2, oklch(0.055 0.045 284)) 48%, var(--aurora-base3, oklch(0.24 0.18 286)));
     filter: saturate(1.08);
+    /* Smooth transition when route changes — only opacity so the gradient swap is instant underneath */
+    transition: opacity 600ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Page-transition fade overlay placed on top of aurora-field */
+  .aurora-field::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--color-background);
+    opacity: var(--page-fade, 0);
+    transition: opacity 400ms cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
   }
 
   .work-visual {
