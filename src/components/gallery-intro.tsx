@@ -6,47 +6,47 @@
 import { useState, useEffect, useCallback } from 'react';
 import InfiniteGallery from './ui/3d-gallery-photography';
 
-// Curated editorial/artistic images matching the dark, moody portfolio vibe
+// Curated editorial/artistic images — using Pexels CDN for reliable WebGL texture loading
 const INTRO_IMAGES = [
   {
-    src: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=1200&q=80',
-    alt: 'Abstract colour wash',
+    src: 'https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'Mountain landscape',
   },
   {
-    src: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80',
-    alt: 'Editorial portrait',
+    src: 'https://images.pexels.com/photos/1287145/pexels-photo-1287145.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'Ocean waves',
   },
   {
-    src: 'https://images.unsplash.com/photo-1504700610630-ac6aba3536d3?w=1200&q=80',
-    alt: 'Minimalist architecture',
+    src: 'https://images.pexels.com/photos/1323550/pexels-photo-1323550.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'Forest path',
   },
   {
-    src: 'https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=1200&q=80',
-    alt: 'Geometric form',
+    src: 'https://images.pexels.com/photos/1591373/pexels-photo-1591373.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'Desert dunes',
   },
   {
-    src: 'https://images.unsplash.com/photo-1494783367193-149034c05e8f?w=1200&q=80',
-    alt: 'Dark moody landscape',
+    src: 'https://images.pexels.com/photos/1450353/pexels-photo-1450353.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'City skyline',
   },
   {
-    src: 'https://images.unsplash.com/photo-1573481078693-e0461a51d25a?w=1200&q=80',
-    alt: 'Sculptural form',
+    src: 'https://images.pexels.com/photos/1761279/pexels-photo-1761279.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'Northern lights',
   },
   {
-    src: 'https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=1200&q=80',
-    alt: 'Abstract texture',
+    src: 'https://images.pexels.com/photos/1624496/pexels-photo-1624496.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'Waterfall',
   },
   {
-    src: 'https://images.unsplash.com/photo-1517816428104-797678c7cf0c?w=1200&q=80',
-    alt: 'Creative direction',
+    src: 'https://images.pexels.com/photos/1770809/pexels-photo-1770809.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'Sunset beach',
   },
   {
-    src: 'https://images.unsplash.com/photo-1519608487953-e999c86e7455?w=1200&q=80',
-    alt: 'Graphic composition',
+    src: 'https://images.pexels.com/photos/2387793/pexels-photo-2387793.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'Abstract light',
   },
   {
-    src: 'https://images.unsplash.com/photo-1509233725247-49e657c54213?w=1200&q=80',
-    alt: 'Typographic study',
+    src: 'https://images.pexels.com/photos/1671325/pexels-photo-1671325.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    alt: 'Misty mountains',
   },
 ];
 
