@@ -1,6 +1,6 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { OpeningCurtain, PortfolioFooter, PortfolioNav } from "../components/portfolio-chrome";
+import { OpeningCurtain, PortfolioFooter, PortfolioNav, CursorGlow } from "../components/portfolio-chrome";
 
 const works = [
   ["The Mirror™", "A guide to seeing your brand, and yourself, clearly.", "Book", "work-visual-a"],
@@ -60,12 +60,3 @@ function Index() {
   );
 }
 
-function CursorGlow() {
-  const [point, setPoint] = useState({ x: -100, y: -100 });
-  useEffect(() => {
-    const move = (e: PointerEvent) => setPoint({ x: e.clientX, y: e.clientY });
-    window.addEventListener("pointermove", move);
-    return () => window.removeEventListener("pointermove", move);
-  }, []);
-  return <div className="cursor-glow" style={{ left: point.x, top: point.y }} aria-hidden="true" />;
-}

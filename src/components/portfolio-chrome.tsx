@@ -71,10 +71,29 @@ export function PageShell({ children }: { children: ReactNode }) {
   return (
     <main className="page-root">
       <OpeningCurtain />
+      <CursorGlow />
       <div className="aurora-field" aria-hidden="true" />
       <PortfolioNav />
       <div className="page-container pt-36 md:pt-44 pb-20">{children}</div>
       <PortfolioFooter />
     </main>
   );
+}
+
+export function CursorGlow() {
+  const [point, setPoint] = useState({ x: -100, y: -100 });
+  const [isHovering, setIsHovering] = useState(false);
+
+  useEffect(() => {
+    const move = (e: PointerEvent) => {
+      setPoint({ x: e.clientX, y: e.clientY });
+      const target = e.target as HTMLElement;
+      const clickable = target?.closest?.('a, button, [role="button"], input, select, textarea');
+      setIsHovering(!!clickable);
+    };
+    window.addEventListener("pointermove", move);
+    return () => window.removeEventListener("pointermove", move);
+  }, []);
+
+  return <div className={`cursor-glow ${isHovering ? "cursor-hover" : ""}`} style={{ left: point.x, top: point.y }} aria-hidden="true" />;
 }
