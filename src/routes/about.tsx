@@ -21,7 +21,7 @@ function About() {
           <p>The work moves between identity, editorial systems, campaigns, books, sound, and digital spaces.</p>
         </div>
       </section>
-      <section className="mt-28 grid gap-8 md:grid-cols-3">
+      <section className="mt-28 grid grid-cols-1 gap-8 md:grid-cols-3">
         {["Direction", "Identity", "Story"].map((item) => (
           <div className="editorial-panel" key={item}>
             <h2 className="font-serif text-3xl">{item}</h2>

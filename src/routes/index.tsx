@@ -1,5 +1,7 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { PageShell } from "../components/portfolio-chrome";
+import { BrandsWorkedWith } from "../components/brands-worked-with";
+import { PhotoGallery } from "../components/ui/gallery";
 
 const works = [
   ["The Mirror™", "A guide to seeing your brand, and yourself, clearly.", "Book", "work-visual-a"],
@@ -23,32 +25,42 @@ export const Route = createFileRoute("/")({
 function Index() {
   return (
     <PageShell noPadding>
-      <section className="relative z-10 flex min-h-[64vh] items-center justify-center px-6 pb-16 pt-36 text-center">
-        <h1 className="font-serif text-[clamp(3.2rem,7vw,6.5rem)] font-semibold leading-none animate-fade-up">
-          A living gallery.
-        </h1>
-      </section>
+      <div className="relative h-[100vh] w-full flex items-center justify-center overflow-hidden bg-transparent">
+        <div className="relative z-10 w-full text-center pointer-events-none">
+          <h1 className="font-serif text-[clamp(4.5rem,12vw,9.5rem)] font-bold leading-none tracking-tighter text-white select-none">
+            <span className="bg-clip-text text-transparent bg-gradient-to-b from-white via-white/95 to-white/50 drop-shadow-[0_4px_30px_rgba(255,255,255,0.15)]">
+              Cloxx Media
+            </span>
+          </h1>
+        </div>
+      </div>
 
-      <section className="page-container grid grid-cols-1 gap-x-28 gap-y-24 pb-28 md:grid-cols-2 md:pb-40">
+      <section className="page-container grid grid-cols-2 gap-x-3 gap-y-10 pb-4 md:gap-x-28 md:gap-y-24 md:pb-8">
         {works.map(([title, description, type, visual], index) => (
-          <article className={`group ${index % 2 ? "md:mt-40" : ""}`} key={title}>
+          <article className={`group ${index % 2 ? "mt-10 md:mt-40" : ""}`} key={title}>
             <Link to="/" className="block">
               <div className={`work-visual ${visual}`}>
                 <span className="view-pill">View work</span>
                 <span className="work-note">Selected note: open for direction, identity and story.</span>
                 <span className="mock-title">{title}</span>
               </div>
-              <div className="mt-5 grid grid-cols-[1fr_auto] gap-5 border-t border-border pt-4">
+              <div className="mt-3 md:mt-5 flex flex-col sm:flex-row justify-between gap-2 md:gap-5 border-t border-border pt-3 md:pt-4">
                 <div>
-                  <h2 className="font-serif text-2xl font-semibold leading-tight md:text-3xl">{title}</h2>
-                  <p className="mt-2 max-w-md text-sm leading-6 text-muted-foreground md:text-base">{description}</p>
+                  <h2 className="font-serif text-lg font-semibold leading-tight md:text-3xl">{title}</h2>
+                  <p className="mt-1 md:mt-2 max-w-md text-[0.65rem] leading-4 text-muted-foreground md:text-base md:leading-6">{description}</p>
                 </div>
-                <p className="eyebrow pt-2">{type}</p>
+                <p className="eyebrow pt-1 md:pt-2 text-[0.55rem] md:text-[0.72rem] hidden sm:block">{type}</p>
               </div>
             </Link>
           </article>
         ))}
       </section>
+
+      <div className="mt-40 mb-20 md:mt-64 md:mb-40">
+        <BrandsWorkedWith />
+      </div>
+      
+      <PhotoGallery />
     </PageShell>
   );
 }

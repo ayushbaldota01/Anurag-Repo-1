@@ -1,5 +1,7 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 import { OpeningCurtain, PortfolioFooter, PortfolioNav, CursorGlow, AuroraField } from "../components/portfolio-chrome";
+import { useState } from "react";
+import { motion } from "framer-motion";
 
 import appCss from "../styles.css?url";
 
@@ -72,14 +74,46 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
+  const [introDone, setIntroDone] = useState(false);
+
+  const ease = [0.25, 1, 0.5, 1] as const;
+
   return (
     <main className="page-root">
-      <OpeningCurtain />
+      <OpeningCurtain onComplete={() => setIntroDone(true)} />
       <CursorGlow />
-      <AuroraField />
-      <PortfolioNav />
-      <Outlet />
-      <PortfolioFooter />
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: introDone ? 1 : 0 }}
+        transition={{ duration: 2.2, delay: 0, ease: "easeOut" }}
+      >
+        <AuroraField />
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: -16 }}
+        animate={{ opacity: introDone ? 1 : 0, y: introDone ? 0 : -16 }}
+        transition={{ duration: 1.1, delay: 0.25, ease }}
+      >
+        <PortfolioNav />
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: introDone ? 1 : 0, y: introDone ? 0 : 24 }}
+        transition={{ duration: 1.4, delay: 0.45, ease }}
+      >
+        <Outlet />
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: introDone ? 1 : 0 }}
+        transition={{ duration: 1.2, delay: 1.1, ease: "easeOut" }}
+      >
+        <PortfolioFooter />
+      </motion.div>
     </main>
   );
 }

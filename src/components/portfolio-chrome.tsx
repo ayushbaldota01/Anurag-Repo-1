@@ -1,5 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type ReactNode, type CSSProperties } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 // Per-route aurora gradient configurations (matched to the design screenshots)
 type AuroraTheme = {
@@ -14,7 +15,7 @@ const AURORA_THEMES: Record<string, AuroraTheme> = {
   "/": {
     // Home — deep purple-violet-blue
     c1: "oklch(0.62 0.31 285 / 0.95)", x1: "77%", y1: "10%",
-    c2: "oklch(0.55 0.31 264 / 0.9)",  x2: "80%", y2: "33%",
+    c2: "oklch(0.55 0.31 264 / 0.9)", x2: "80%", y2: "33%",
     c3: "oklch(0.52 0.25 345 / 0.78)", x3: "72%", y3: "70%",
     c4: "oklch(0.38 0.2  355 / 0.72)", x4: "12%", y4: "88%",
     base1: "oklch(0.035 0.02 292)",
@@ -24,9 +25,9 @@ const AURORA_THEMES: Record<string, AuroraTheme> = {
   "/notes": {
     // Notes — vivid violet-magenta
     c1: "oklch(0.58 0.35 310 / 0.95)", x1: "75%", y1: "8%",
-    c2: "oklch(0.52 0.33 295 / 0.9)",  x2: "82%", y2: "40%",
-    c3: "oklch(0.48 0.28 330 / 0.8)",  x3: "65%", y3: "75%",
-    c4: "oklch(0.32 0.22 320 / 0.7)",  x4: "10%", y4: "90%",
+    c2: "oklch(0.52 0.33 295 / 0.9)", x2: "82%", y2: "40%",
+    c3: "oklch(0.48 0.28 330 / 0.8)", x3: "65%", y3: "75%",
+    c4: "oklch(0.32 0.22 320 / 0.7)", x4: "10%", y4: "90%",
     base1: "oklch(0.03  0.02 305)",
     base2: "oklch(0.05  0.04 298)",
     base3: "oklch(0.22  0.2  308)",
@@ -34,16 +35,16 @@ const AURORA_THEMES: Record<string, AuroraTheme> = {
   "/about": {
     // About — deep ocean blue
     c1: "oklch(0.50 0.32 252 / 0.95)", x1: "80%", y1: "12%",
-    c2: "oklch(0.45 0.28 240 / 0.9)",  x2: "78%", y2: "45%",
+    c2: "oklch(0.45 0.28 240 / 0.9)", x2: "78%", y2: "45%",
     c3: "oklch(0.42 0.22 258 / 0.78)", x3: "68%", y3: "78%",
-    c4: "oklch(0.30 0.18 248 / 0.7)",  x4: "8%",  y4: "85%",
+    c4: "oklch(0.30 0.18 248 / 0.7)", x4: "8%", y4: "85%",
     base1: "oklch(0.03  0.03 250)",
     base2: "oklch(0.05  0.05 245)",
     base3: "oklch(0.18  0.16 252)",
   },
   "/work-with-me": {
     // Work with me — teal-emerald
-    c1: "oklch(0.56 0.22 178 / 0.9)",  x1: "78%", y1: "10%",
+    c1: "oklch(0.56 0.22 178 / 0.9)", x1: "78%", y1: "10%",
     c2: "oklch(0.50 0.20 188 / 0.85)", x2: "75%", y2: "38%",
     c3: "oklch(0.44 0.18 200 / 0.75)", x3: "66%", y3: "72%",
     c4: "oklch(0.32 0.14 190 / 0.68)", x4: "10%", y4: "88%",
@@ -53,10 +54,10 @@ const AURORA_THEMES: Record<string, AuroraTheme> = {
   },
   "/contact": {
     // Contact — warm amber-orange
-    c1: "oklch(0.58 0.18  65 / 0.9)",  x1: "76%", y1: "15%",
+    c1: "oklch(0.58 0.18  65 / 0.9)", x1: "76%", y1: "15%",
     c2: "oklch(0.52 0.20  55 / 0.85)", x2: "80%", y2: "42%",
     c3: "oklch(0.44 0.16  45 / 0.75)", x3: "68%", y3: "74%",
-    c4: "oklch(0.32 0.12  50 / 0.68)", x4: "8%",  y4: "88%",
+    c4: "oklch(0.32 0.12  50 / 0.68)", x4: "8%", y4: "88%",
     base1: "oklch(0.04  0.03  62)",
     base2: "oklch(0.06  0.05  58)",
     base3: "oklch(0.20  0.14  60)",
@@ -72,22 +73,63 @@ const navLinks = [
 ] as const;
 
 export function PortfolioNav() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [pathname]);
+
   return (
-    <header className="portfolio-nav">
-      <Link to="/" className="font-serif text-lg font-semibold md:text-xl">
-        Anurag
-      </Link>
-      <nav className="hidden md:flex nav-list">
-        {navLinks.map(([label, to]) => (
-          <Link key={to} to={to} activeOptions={{ exact: true }} className="nav-link">
-            {label}
-          </Link>
-        ))}
-      </nav>
-      <Link to="/contact" className="nav-link md:hidden">
-        Contact
-      </Link>
-    </header>
+    <>
+      <header className="portfolio-nav">
+        <Link to="/" className="font-serif text-lg font-semibold md:text-xl">
+          Anurag
+        </Link>
+
+        {/* Desktop Nav */}
+        <nav className="hidden md:flex nav-list">
+          {navLinks.map(([label, to]) => (
+            <Link key={to} to={to} activeOptions={{ exact: true }} className="nav-link">
+              {label}
+            </Link>
+          ))}
+        </nav>
+
+        {/* Mobile Nav Trigger */}
+        <button
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          className="nav-link md:hidden flex items-center gap-2 px-2"
+          aria-label="Toggle menu"
+        >
+          <span className="text-[0.62rem] tracking-[0.2em]">{isMenuOpen ? "CLOSE" : "MENU"}</span>
+        </button>
+      </header>
+
+      {/* Mobile Menu Overlay */}
+      {isMenuOpen && (
+        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background/95 backdrop-blur-xl animate-in fade-in duration-300 md:hidden">
+          <nav className="flex flex-col items-center gap-8">
+            {navLinks.map(([label, to]) => (
+              <Link
+                key={to}
+                to={to}
+                className="text-2xl font-serif font-medium tracking-tight text-foreground/80 hover:text-foreground transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {label}
+              </Link>
+            ))}
+          </nav>
+          <button
+            onClick={() => setIsMenuOpen(false)}
+            className="mt-16 eyebrow opacity-60 hover:opacity-100 transition-opacity"
+          >
+            Close
+          </button>
+        </div>
+      )}
+    </>
   );
 }
 
@@ -106,17 +148,93 @@ export function PortfolioFooter() {
   );
 }
 
-export function OpeningCurtain() {
-  const [gone, setGone] = useState(false);
+export function OpeningCurtain({ onComplete }: { onComplete?: () => void }) {
+  const [phase, setPhase] = useState<'text' | 'video' | 'ended'>('text');
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [dissolve, setDissolve] = useState(0);
+
   useEffect(() => {
-    const t = setTimeout(() => setGone(true), 1400);
-    return () => clearTimeout(t);
+    const t1 = setTimeout(() => setPhase('video'), 1800);
+    return () => clearTimeout(t1);
   }, []);
-  if (gone) return null;
+
+  const handleTimeUpdate = () => {
+    const vid = videoRef.current;
+    if (!vid || !vid.duration) return;
+    const remaining = vid.duration - vid.currentTime;
+    if (remaining < 1.5) {
+      const t = 1 - remaining / 1.5;
+      setDissolve(t * t);
+    }
+  };
+
+  const handleVideoEnded = () => {
+    setDissolve(1);
+    setPhase('ended');
+  };
+
+  const curtainBg = `rgba(9, 5, 20, ${1 - dissolve})`;
+
   return (
-    <div className="opening-curtain" aria-hidden="true">
-      <span className="opening-mark">Anurag</span>
-    </div>
+    <AnimatePresence mode="wait" onExitComplete={() => onComplete?.()}>
+      {phase !== 'ended' && (
+        <motion.div
+          key="curtain"
+          initial={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1.8, ease: [0.16, 0.6, 0.2, 1] }}
+          className="fixed inset-0 z-[9999] overflow-hidden"
+          style={{ backgroundColor: curtainBg }}
+        >
+          {phase === 'text' && (
+            <motion.div
+              key="text-phase"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0, filter: "blur(12px)", scale: 1.04 }}
+              transition={{ duration: 0.8, ease: "easeInOut" }}
+              className="absolute inset-0 flex flex-col items-center justify-center gap-4"
+            >
+              <motion.span
+                initial={{ letterSpacing: "0.15em", opacity: 0 }}
+                animate={{ letterSpacing: "0.45em", opacity: 1 }}
+                transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
+                className="font-serif text-[clamp(2.5rem,7vw,5rem)] font-bold text-white pl-[0.45em]"
+              >
+                Anurag
+              </motion.span>
+              <motion.div
+                initial={{ width: 0, opacity: 0 }}
+                animate={{ width: "50px", opacity: 0.25 }}
+                transition={{ delay: 0.4, duration: 1.0, ease: "easeOut" }}
+                className="h-px bg-white"
+              />
+            </motion.div>
+          )}
+
+          {phase === 'video' && (
+            <motion.div
+              key="video-phase"
+              initial={{ opacity: 0, scale: 1.0 }}
+              animate={{ opacity: 1 - dissolve, scale: 1 + dissolve * 0.06 }}
+              transition={{ opacity: { duration: 0.9, ease: "easeInOut" }, scale: { duration: 0, ease: "linear" } }}
+              className="absolute inset-0 w-full h-full"
+            >
+              <video
+                ref={videoRef}
+                className="w-full h-full object-cover"
+                autoPlay
+                muted
+                playsInline
+                onTimeUpdate={handleTimeUpdate}
+                onEnded={handleVideoEnded}
+                src="/intro.mp4"
+              />
+            </motion.div>
+          )}
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
 
@@ -145,8 +263,13 @@ export function PageShell({ children, noPadding = false }: { children: ReactNode
 export function CursorGlow() {
   const [point, setPoint] = useState({ x: -100, y: -100 });
   const [isHovering, setIsHovering] = useState(false);
+  const [isTouch, setIsTouch] = useState(false);
 
   useEffect(() => {
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    setIsTouch(isTouchDevice);
+    if (isTouchDevice) return;
+
     const move = (e: PointerEvent) => {
       setPoint({ x: e.clientX, y: e.clientY });
       const target = e.target as HTMLElement;
@@ -156,6 +279,8 @@ export function CursorGlow() {
     window.addEventListener("pointermove", move);
     return () => window.removeEventListener("pointermove", move);
   }, []);
+
+  if (isTouch) return null;
 
   return <div className={`cursor-glow ${isHovering ? "cursor-hover" : ""}`} style={{ left: point.x, top: point.y }} aria-hidden="true" />;
 }
