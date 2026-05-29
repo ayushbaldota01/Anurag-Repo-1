@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type ReactNode, type CSSProperties } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, useTransform, useMotionTemplate, useAnimationFrame } from "framer-motion";
 
 // Per-route aurora gradient configurations (matched to the design screenshots)
 type AuroraTheme = {
@@ -66,8 +66,8 @@ const AURORA_THEMES: Record<string, AuroraTheme> = {
 
 const navLinks = [
   ["Works", "/"],
-  ["Notes", "/notes"],
   ["About", "/about"],
+  ["Vault", "/vault"],
   ["Work with me", "/work-with-me"],
   ["Contact", "/contact"],
 ] as const;
@@ -151,39 +151,74 @@ export function PortfolioFooter() {
 export function OpeningCurtain({ onComplete }: { onComplete?: () => void }) {
   const [phase, setPhase] = useState<'text' | 'video' | 'ended'>('text');
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [dissolve, setDissolve] = useState(0);
+
+  const progress = useMotionValue(0);
+
+  const hasEndedRef = useRef(false);
+
+  // Smoothly update progress at 60fps
+  useAnimationFrame(() => {
+    if (videoRef.current && videoRef.current.duration) {
+      const vid = videoRef.current;
+      progress.set(vid.currentTime / vid.duration);
+
+      // CHANGE THIS VALUE to adjust exactly when the video stops (in seconds from the end)
+      // For example, 1.2 will stop the video 1.2 seconds before it normally ends.
+      const SECONDS_TO_CUT_EARLY = 2.2; 
+
+      if (!hasEndedRef.current && vid.currentTime >= vid.duration - SECONDS_TO_CUT_EARLY) {
+        hasEndedRef.current = true;
+        vid.pause();
+        handleVideoEnded();
+      }
+    }
+  });
+
+  // Calculate dissolve smoothly at the end of the video
+  const dissolve = useTransform(progress, (p) => {
+    if (!videoRef.current || !videoRef.current.duration) return 0;
+    const remaining = videoRef.current.duration * (1 - p);
+    if (remaining < 1.5) {
+      const t = 1 - (remaining / 1.5);
+      return t * t;
+    }
+    return 0;
+  });
+
+  const curtainOpacity = useTransform(dissolve, d => 1 - d);
+  const curtainBg = useMotionTemplate`rgba(9, 5, 20, ${curtainOpacity})`;
+
+  // Continuous smooth zoom of the video
+  const scale = useTransform(progress, [0, 1], [0.65, 1.25]);
+
+  // Expanding soft mask: starts as a soft crop, expands to full screen to gain original ratio
+  const maskStop1 = useTransform(progress, [0, 0.7], [25, 100]); // Solid center expands
+  const maskStop2 = useTransform(progress, [0, 0.7], [50, 150]); // Transparent edge expands
+  const maskImage = useMotionTemplate`radial-gradient(ellipse at center, black ${maskStop1}%, transparent ${maskStop2}%)`;
+
+  // Black gradient vignette effect at the corners that gradually lowers as we zoom in
+  const vignetteOpacity = useTransform(progress, [0, 0.9], [1, 0]);
+  const vignetteBackground = "radial-gradient(ellipse at center, transparent 15%, rgba(0,0,0,0.95) 50%, rgba(0,0,0,1) 85%)";
 
   useEffect(() => {
     const t1 = setTimeout(() => setPhase('video'), 1800);
     return () => clearTimeout(t1);
   }, []);
 
-  const handleTimeUpdate = () => {
-    const vid = videoRef.current;
-    if (!vid || !vid.duration) return;
-    const remaining = vid.duration - vid.currentTime;
-    if (remaining < 1.5) {
-      const t = 1 - remaining / 1.5;
-      setDissolve(t * t);
-    }
-  };
-
   const handleVideoEnded = () => {
-    setDissolve(1);
     setPhase('ended');
+    onComplete?.();
   };
-
-  const curtainBg = `rgba(9, 5, 20, ${1 - dissolve})`;
 
   return (
-    <AnimatePresence mode="wait" onExitComplete={() => onComplete?.()}>
+    <AnimatePresence mode="wait">
       {phase !== 'ended' && (
         <motion.div
           key="curtain"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 1.8, ease: [0.16, 0.6, 0.2, 1] }}
-          className="fixed inset-0 z-[9999] overflow-hidden"
+          transition={{ duration: 0.8, ease: [0.16, 0.6, 0.2, 1] }}
+          className="fixed inset-0 z-[9999] overflow-hidden flex items-center justify-center"
           style={{ backgroundColor: curtainBg }}
         >
           {phase === 'text' && (
@@ -195,14 +230,14 @@ export function OpeningCurtain({ onComplete }: { onComplete?: () => void }) {
               transition={{ duration: 0.8, ease: "easeInOut" }}
               className="absolute inset-0 flex flex-col items-center justify-center gap-4"
             >
-              <motion.span
-                initial={{ letterSpacing: "0.15em", opacity: 0 }}
-                animate={{ letterSpacing: "0.45em", opacity: 1 }}
+              <motion.img
+                src="/cloxx-logo.png"
+                alt="Cloxx Media"
+                initial={{ scale: 0.95, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
-                className="font-serif text-[clamp(2.5rem,7vw,5rem)] font-bold text-white pl-[0.45em]"
-              >
-                Anurag
-              </motion.span>
+                className="w-auto h-[30vh] md:h-[45vh] object-contain pt-4"
+              />
               <motion.div
                 initial={{ width: 0, opacity: 0 }}
                 animate={{ width: "50px", opacity: 0.25 }}
@@ -215,20 +250,29 @@ export function OpeningCurtain({ onComplete }: { onComplete?: () => void }) {
           {phase === 'video' && (
             <motion.div
               key="video-phase"
-              initial={{ opacity: 0, scale: 1.0 }}
-              animate={{ opacity: 1 - dissolve, scale: 1 + dissolve * 0.06 }}
-              transition={{ opacity: { duration: 0.9, ease: "easeInOut" }, scale: { duration: 0, ease: "linear" } }}
-              className="absolute inset-0 w-full h-full"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              style={{ opacity: curtainOpacity, maskImage, WebkitMaskImage: maskImage }}
+              transition={{ duration: 0.9, ease: "easeInOut" }}
+              className="absolute inset-0 flex items-center justify-center w-full h-full"
             >
-              <video
+              <motion.video
                 ref={videoRef}
+                style={{ scale }}
                 className="w-full h-full object-cover"
                 autoPlay
                 muted
                 playsInline
-                onTimeUpdate={handleTimeUpdate}
                 onEnded={handleVideoEnded}
                 src="/intro.mp4"
+              />
+              {/* Vignette Overlay */}
+              <motion.div 
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background: vignetteBackground,
+                  opacity: vignetteOpacity
+                }}
               />
             </motion.div>
           )}

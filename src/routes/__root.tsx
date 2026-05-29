@@ -92,25 +92,39 @@ function RootComponent() {
       </motion.div>
 
       <motion.div
-        initial={{ opacity: 0, y: -16 }}
-        animate={{ opacity: introDone ? 1 : 0, y: introDone ? 0 : -16 }}
-        transition={{ duration: 1.1, delay: 0.25, ease }}
+        className="fixed top-0 left-0 w-full z-50 pointer-events-none [&>*]:pointer-events-auto"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ 
+          opacity: introDone ? 1 : 0, 
+          y: introDone ? 0 : -20
+        }}
+        transition={{ duration: 1.2, delay: 1.2, ease }}
       >
         <PortfolioNav />
       </motion.div>
 
       <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: introDone ? 1 : 0, y: introDone ? 0 : 24 }}
-        transition={{ duration: 1.4, delay: 0.45, ease }}
+        initial="hidden"
+        animate={introDone ? "visible" : "hidden"}
+        variants={{
+          hidden: { opacity: 0, scale: 0.95, y: 40, filter: "blur(20px)" },
+          visible: { 
+            opacity: 1, scale: 1, y: 0, filter: "blur(0px)",
+            transition: { duration: 1.6, delay: 0, ease: [0.25, 1, 0.5, 1] } 
+          }
+        }}
       >
         <Outlet />
       </motion.div>
 
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: introDone ? 1 : 0 }}
-        transition={{ duration: 1.2, delay: 1.1, ease: "easeOut" }}
+        initial={{ opacity: 0, y: 20, filter: "blur(10px)" }}
+        animate={{ 
+          opacity: introDone ? 1 : 0,
+          y: introDone ? 0 : 20,
+          filter: introDone ? "blur(0px)" : "blur(10px)"
+        }}
+        transition={{ duration: 1.4, delay: 0, ease }}
       >
         <PortfolioFooter />
       </motion.div>

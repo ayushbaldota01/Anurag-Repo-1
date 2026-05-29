@@ -10,7 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WorkWithMeRouteImport } from './routes/work-with-me'
-import { Route as NotesRouteImport } from './routes/notes'
+import { Route as VaultRouteImport } from './routes/vault'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
@@ -20,9 +20,9 @@ const WorkWithMeRoute = WorkWithMeRouteImport.update({
   path: '/work-with-me',
   getParentRoute: () => rootRouteImport,
 } as any)
-const NotesRoute = NotesRouteImport.update({
-  id: '/notes',
-  path: '/notes',
+const VaultRoute = VaultRouteImport.update({
+  id: '/vault',
+  path: '/vault',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -45,14 +45,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
-  '/notes': typeof NotesRoute
+  '/vault': typeof VaultRoute
   '/work-with-me': typeof WorkWithMeRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
-  '/notes': typeof NotesRoute
+  '/vault': typeof VaultRoute
   '/work-with-me': typeof WorkWithMeRoute
 }
 export interface FileRoutesById {
@@ -60,22 +60,22 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
-  '/notes': typeof NotesRoute
+  '/vault': typeof VaultRoute
   '/work-with-me': typeof WorkWithMeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/contact' | '/notes' | '/work-with-me'
+  fullPaths: '/' | '/about' | '/contact' | '/vault' | '/work-with-me'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/contact' | '/notes' | '/work-with-me'
-  id: '__root__' | '/' | '/about' | '/contact' | '/notes' | '/work-with-me'
+  to: '/' | '/about' | '/contact' | '/vault' | '/work-with-me'
+  id: '__root__' | '/' | '/about' | '/contact' | '/vault' | '/work-with-me'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   ContactRoute: typeof ContactRoute
-  NotesRoute: typeof NotesRoute
+  VaultRoute: typeof VaultRoute
   WorkWithMeRoute: typeof WorkWithMeRoute
 }
 
@@ -88,11 +88,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkWithMeRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/notes': {
-      id: '/notes'
-      path: '/notes'
-      fullPath: '/notes'
-      preLoaderRoute: typeof NotesRouteImport
+    '/vault': {
+      id: '/vault'
+      path: '/vault'
+      fullPath: '/vault'
+      preLoaderRoute: typeof VaultRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -123,7 +123,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   ContactRoute: ContactRoute,
-  NotesRoute: NotesRoute,
+  VaultRoute: VaultRoute,
   WorkWithMeRoute: WorkWithMeRoute,
 }
 export const routeTree = rootRouteImport

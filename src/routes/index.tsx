@@ -2,6 +2,7 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 import { PageShell } from "../components/portfolio-chrome";
 import { BrandsWorkedWith } from "../components/brands-worked-with";
 import { PhotoGallery } from "../components/ui/gallery";
+import { motion } from "framer-motion";
 
 const works = [
   ["The Mirror™", "A guide to seeing your brand, and yourself, clearly.", "Book", "work-visual-a"],
@@ -33,15 +34,41 @@ function Index() {
             </span>
           </h1>
         </div>
+        
+        {/* Tender Scroll Indicator */}
+        <motion.div 
+          className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 pointer-events-none"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: { opacity: 0.7, transition: { delay: 1.6, duration: 1.5, ease: "easeOut" } }
+          }}
+        >
+          <span className="font-sans font-bold text-[0.68rem] tracking-[0.18em] text-white/80 uppercase">
+            scroll to discover
+          </span>
+          <div className="h-12 w-[1px] bg-white/20 overflow-hidden relative">
+            <motion.div 
+              className="absolute top-0 left-0 w-full h-full bg-white/80"
+              animate={{ y: ["-100%", "100%"] }}
+              transition={{ repeat: Infinity, duration: 2, ease: "easeInOut", repeatDelay: 0.5 }}
+            />
+          </div>
+        </motion.div>
       </div>
 
       <section className="page-container grid grid-cols-2 gap-x-3 gap-y-10 pb-4 md:gap-x-28 md:gap-y-24 md:pb-8">
         {works.map(([title, description, type, visual], index) => (
-          <article className={`group ${index % 2 ? "mt-10 md:mt-40" : ""}`} key={title}>
+          <motion.article 
+            className={`group ${index % 2 ? "mt-10 md:mt-40" : ""}`} 
+            key={title}
+            initial={{ opacity: 0, y: 60 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-10%" }}
+            transition={{ duration: 1.6, delay: (index % 2) * 0.3, ease: [0.16, 1, 0.3, 1] }}
+          >
             <Link to="/" className="block">
               <div className={`work-visual ${visual}`}>
                 <span className="view-pill">View work</span>
-                <span className="work-note">Selected note: open for direction, identity and story.</span>
                 <span className="mock-title">{title}</span>
               </div>
               <div className="mt-3 md:mt-5 flex flex-col sm:flex-row justify-between gap-2 md:gap-5 border-t border-border pt-3 md:pt-4">
@@ -52,7 +79,7 @@ function Index() {
                 <p className="eyebrow pt-1 md:pt-2 text-[0.55rem] md:text-[0.72rem] hidden sm:block">{type}</p>
               </div>
             </Link>
-          </article>
+          </motion.article>
         ))}
       </section>
 
