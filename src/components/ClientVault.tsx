@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 const CLIENT_VAULT: Record<string, { name: string; driveUrl: string }> = {
   "CODE123": { name: "Vogue Editorial", driveUrl: "https://drive.google.com/" },
   "ANURAG2026": { name: "Jack Watkins", driveUrl: "https://drive.google.com/" },
+  "AYUSH123": { name: "Ayush", driveUrl: "https://drive.google.com/drive/folders/1a2R3070dqXOsBpf9WFMQqwJZjppvdggv" },
 };
 
 export function ClientVault() {
