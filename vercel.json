@@ -1,13 +1,11 @@
 {
   "version": 2,
+  "outputDirectory": "dist/client",
   "cleanUrls": true,
-  "routes": [
+  "rewrites": [
     {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/api/index"
+      "source": "/(.*)",
+      "destination": "/api"
     }
   ]
 }
