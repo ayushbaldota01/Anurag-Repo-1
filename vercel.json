@@ -2,10 +2,15 @@
   "version": 2,
   "outputDirectory": "dist/client",
   "cleanUrls": true,
+  "functions": {
+    "api/index.js": {
+      "runtime": "edge"
+    }
+  },
   "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "/api"
+      "destination": "/api/index.js"
     }
   ]
 }
